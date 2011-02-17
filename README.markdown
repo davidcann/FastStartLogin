@@ -18,7 +18,7 @@ Copy these files into your app:
 
 In Terminal:
 
-* cd [to you project drectory]
+* cd [to your project drectory]
 * jake
 * mkdir Build/Press
 * press -f Build/Debug/[MyApp]/ Build/Press/[MyApp]
