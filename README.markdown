@@ -17,6 +17,7 @@ Copy these files into your app:
 * index-debug.html (doesn't check download progress)
 
 In Terminal:
+
 * cd [to you project drectory]
 * jake
 * mkdir Build/Press
