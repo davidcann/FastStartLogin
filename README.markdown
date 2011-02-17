@@ -16,6 +16,8 @@ Copy these files into your app:
 * index.html
 * index-debug.html (doesn't check download progress)
 
+In Terminal, cd to you project drectory and run "jake" then "mkdir Build/Press" then "press -f Build/Debug/[MyApp]/ Build/Press/[MyApp]"
+
 
 ## License
 
