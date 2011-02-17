@@ -1,0 +1,269 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!--
+ index-debug.html
+ FastStartLogin
+
+ Created by Cann on February 17, 2011.
+ Copyright 2011, Cann All rights reserved.
+-->
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+		<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+		<link rel="apple-touch-icon" href="Resources/icon.png" />
+		<link rel="apple-touch-startup-image" href="Resources/default.png" />
+
+		<title>Fast Start Login</title>
+
+		<script type="text/javascript">
+			OBJJ_MAIN_FILE = "main.j";
+			OBJJ_INCLUDE_PATHS = ["Frameworks/Debug", "Frameworks", "SomethingElse"];
+
+			OBJJ_DEFER_START = true;
+			var didAuthenticate = false;
+			var progressBarPill = null;
+			var didFinishLoading = true; // ***** assume it's loaded in debug mode *****
+
+			OBJJ_PROGRESS_CALLBACK = function(percent) {
+				percent = 100 * percent;
+
+				if (!progressBarPill)
+					progressBarPill = document.getElementById("progressBarPill");
+
+				if (percent > 5)
+					progressBarPill.style.width = percent + "%";
+			}
+
+			OBJJ_DID_FINISH_LOADING = function () {
+				// this is called when progress == 100%, since OBJJ_PROGRESS_CALLBACK doesn't seem to get called for 100%
+				OBJJ_PROGRESS_CALLBACK(1);
+				didFinishLoading = true;
+				document.getElementById("progressContainer").innerHTML = "";
+				start();
+			}
+
+			function start() {
+				if (typeof CPApplicationMain === "function" && didAuthenticate && didFinishLoading) {
+					document.body.style.background = "#FFF";
+					document.getElementById("container").innerHTML = "";
+					CPApplicationMain();
+				} else {
+					OBJJ_DEFER_START = false;
+				}
+			}
+
+			function submitForm(form) {
+				var submit = document.getElementById("submit");
+				submit.disabled = true;
+				submit.value = "...";
+				submit.style.opacity = "0.5";
+
+				// send AJAX call to authenticate the user
+				authenticationDidSucceed(); // call this upon success
+			}
+
+			function authenticationDidSucceed() {
+				didAuthenticate = true;
+				start();
+			}
+		</script>
+		
+		<script src="Frameworks/Debug/Objective-J/Objective-J.js" type="text/javascript" charset="UTF-8"></script>
+		
+		<script type="text/javascript">
+			objj_msgSend_reset();
+
+			// DEBUG OPTIONS:
+
+			// Uncomment to enable printing of backtraces on exceptions:
+			//objj_msgSend_decorate(objj_backtrace_decorator);
+			
+			// Uncomment to supress exceptions that take place inside a message
+			//objj_msgSend_decorate(objj_supress_exceptions_decorator)
+
+			// Uncomment to enable runtime type checking:
+			//objj_msgSend_decorate(objj_typecheck_decorator);
+
+			// Uncomment (along with both above) to print backtraces on type check errors:
+			//objj_typecheck_prints_backtrace = true;
+
+			// Uncomment to disable the default logger (CPLogConsole if window.console exists, CPLogPopup otherwise):
+			//CPLogUnregister(CPLogDefault);
+
+			// Uncomment to enable a specific logger:
+			//CPLogRegister(CPLogConsole);
+			//CPLogRegister(CPLogPopup);
+		</script>
+		
+		<style type = "text/css">
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: #555555;
+			}
+			#container {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+			}
+			h1 {
+				color: white;
+				font-size: 50px;
+				font-weight: bold;
+				position: absolute;
+				text-align: center;
+				text-shadow: 2px 2px 0px black;
+				top: -200px;
+				width: 200%;
+			}
+			#content {
+				background: white;
+				border-radius: 6px; moz-border-radius: 6px; -webkit-border-radius: 6px;
+				box-shadow: 3px 3px 0px #000; -webkit-box-shadow: 3px 3px 0px #000; -moz-box-shadow: 3px 3px 0px #000;
+				color: black;
+				font-family: "Helvetica", "Arial", sans-serif;
+				font-size: 18px;
+				height: 140px;
+				line-height: 30px;
+				margin-left: -325px;
+				margin-top: -70px;
+				padding: 0px;
+				text-shadow: 0px 1px 0px white;
+				width: 650px;
+			}
+			#interior {
+				padding: 20px;
+			}
+			#progressContainer {
+				bottom: -80px;
+				color: #AAAAAA;
+				left: -150px;
+				font-size: 14px;
+				position: absolute;
+				text-shadow: 2px 2px 0px black;
+			}
+			#progressBarPill { 
+				background: #FFFFFF;
+				border-radius: 1px; moz-border-radius: 1px; -webkit-border-radius: 1px;
+				display: block;
+				height: 10px;
+				position: relative;
+				width: 5%;
+			}
+			#progressBar { 
+				background: #808080;
+				border-radius: 3px; moz-border-radius: 3px; -webkit-border-radius: 3px;
+				box-shadow: 2px 2px 0px #000; -webkit-box-shadow: 2px 2px 0px #000; -moz-box-shadow: 2px 2px 0px #000;
+				display: block;
+				height: 10px;
+				padding: 3px;
+				width: 300px;
+			}
+			#container form {
+
+			}
+			#container form .label {
+				color: #777777;
+				float: left;
+				font-size: 20px;
+				font-weight: bold;
+				margin: 10px;
+				margin-bottom: 0px;
+				margin-top: 3px;
+				width: 220px;
+			}
+			#container form input.text {
+				border: 2px solid rgb(0, 141, 204);
+				border-radius: 6px; moz-border-radius: 6px; -webkit-border-radius: 6px;
+				box-shadow: 2px 2px 0px rgb(0, 61, 124); -webkit-box-shadow: 2px 2px 0px rgb(0, 61, 124); -moz-box-shadow: 2px 2px 0px rgb(0, 61, 124);
+				float: left;
+				font-size: 24px;
+				margin: 10px;
+				padding: 8px;
+				width: 200px;
+			}
+			#container form input.submit {
+				background: rgb(0, 152, 222);
+				border: 0px;
+				border-radius: 6px; moz-border-radius: 6px; -webkit-border-radius: 6px;
+				box-shadow: 2px 2px 0px rgb(0, 61, 124); -webkit-box-shadow: 2px 2px 0px rgb(0, 61, 124); -moz-box-shadow: 2px 2px 0px rgb(0, 61, 124);
+				color: white;
+				float: left;
+				font-size: 18px;
+				margin: 10px;
+				margin-top: 10px;
+				padding: 13px;
+				padding-left: 22px;
+				padding-right: 22px;
+				text-shadow: 2px 2px 0px rgb(0, 101, 164);
+				width: 110px;
+			}
+			#container form input.submit:active {
+				box-shadow: 0px 0px 0px rgb(0, 61, 124); -webkit-box-shadow: 0px 0px 0px rgb(0, 61, 124); -moz-box-shadow: 0px 0px 0px rgb(0, 61, 124);
+				margin-left: 12px;
+				margin-right: 6px;
+				margin-top: 12px;
+			}
+		</style>
+
+		<!--[if lt IE 7]>
+		<STYLE type="text/css">
+			#container { position: relative; top: 50%; }
+			#content { position: relative;}
+		</STYLE>
+		<![endif]-->
+
+	</head>
+
+		<body style="" onLoad="document.getElementById('username').focus();">
+			<div id="loadingcontainer" style=" overflow:hidden; width:100%; height:100%; position: absolute; top: 0; left: 0;">
+				<script type="text/javascript">
+						document.write( "<div id='container'>" +
+											"<div id='content'>" +
+												"<h1>Fast Start Login</h1>" +
+												"<div id='interior'>" +
+													"<form id='formContainer' action='javascript:void(0);' onsubmit='submitForm(this);'>" +
+														"<div class='label'>Username</div>" +
+														"<div class='label'>Password</div>" +
+														"<br />" +
+														"<input type='text' class='text' id='username' />" +
+														"<input type='password' class='text' />" +
+														"<input type='submit' class='submit' id='submit' name='submit' value='Sign In' />" +
+													"</form>" +
+													"<div id='progressContainer'>" +
+														"<div id='textcontent'>Loading... </div>" + 
+														"<div id='progressBar'><span id='progressBarPill'></span></div>" +
+													"</div>" +
+												"</div>" +
+											"</div>" +
+										"</div>");
+					</script>
+	
+			<noscript>
+				<div id="container">
+					<div style="width: 440px; padding: 10px 25px 20px 25px; font-family: sans-serif; position: relative; left: -245px; top: -120px; text-align: center; -moz-border-radius: 20px; -webkit-border-radius: 20px; color: #555555">
+						<p style="line-height: 1.4em;">JavaScript is required for this site to work correctly but is either disabled or not supported by your browser.</p>
+						<p style="font-size:120%; padding:10px;"><a href="http://cappuccino.org/noscript">Show me how to enable JavaScript</a></p>
+						<p style="font-size:80%;">You may want to upgrade to a newer browser while you're at it:</p>
+						<ul style="margin:0;padding:0; text-align: center; font-size:80%;" >
+							<li style="display: inline;"><a href="http://www.apple.com/safari/download/">Safari</a></li>
+							<li style="display: inline;"><a href="http://www.mozilla.com/en-US/firefox/">Firefox</a></li>
+							<li style="display: inline;"><a href="http://www.google.com/chrome/">Chrome</a></li>
+							<li style="display: inline;"><a href="http://www.opera.com/download/">Opera</a></li>
+							<li style="display: inline;"><a href="http://www.microsoft.com/windows/downloads/ie/getitnow.mspx">Internet Explorer</a></li>
+						</ul>
+					</div>
+				</div>
+			</noscript>
+		</div>
+	</body>
+
+</html>
