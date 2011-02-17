@@ -17,10 +17,10 @@ Copy these files into your app:
 * index-debug.html (doesn't check download progress)
 
 In Terminal:
-> cd [to you project drectory]
-> jake
-> mkdir Build/Press
-> press -f Build/Debug/[MyApp]/ Build/Press/[MyApp]
+* cd [to you project drectory]
+* jake
+* mkdir Build/Press
+* press -f Build/Debug/[MyApp]/ Build/Press/[MyApp]
 
 Then go to http://server/[MyApp]/Build/Press/[MyApp]/index.html in your browser.
 
